@@ -2,137 +2,154 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OBI Trading OS V8.6</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#155EEF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="/manifest.webmanifest">
+<title>OBI Trading OS V8.7 • Live</title>
 <style>
-:root{--bg:#081018;--card:#101b26;--line:#243646;--txt:#eaf2f8;--muted:#8fa3b5;--green:#36d399;--red:#ff657a;--blue:#5aa9ff;--orange:#ffb454}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px system-ui,Arial,sans-serif}
-header{padding:18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#081018ee;backdrop-filter:blur(10px);z-index:3}
-h1{margin:0;font-size:20px}small,.muted{color:var(--muted)}main{max-width:1200px;margin:auto;padding:14px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
-.stat b{font-size:20px;display:block;margin-top:4px}.green{color:var(--green)}.red{color:var(--red)}.orange{color:var(--orange)}.blue{color:var(--blue)}
-.controls{display:flex;gap:8px;flex-wrap:wrap}.controls input,.controls select,button{background:#0b151e;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:9px}
-button{cursor:pointer}.primary{border-color:var(--blue);background:#10243a}.danger{border-color:var(--red)}
-table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}tr:hover{background:#152331;cursor:pointer}
-#chart{width:100%;height:330px;background:#09131c;border-radius:10px}.split{display:grid;grid-template-columns:1.5fr 1fr;gap:12px}
-.ticket{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.ticket label{font-size:12px;color:var(--muted)}.ticket input{width:100%;margin-top:4px}
-.notice{padding:10px;border-radius:8px;background:#0b151e;border:1px solid var(--line);margin-top:8px}
-@media(max-width:800px){.grid,.split,.ticket{grid-template-columns:1fr 1fr}}@media(max-width:520px){.grid,.split,.ticket{grid-template-columns:1fr}th:nth-child(n+5),td:nth-child(n+5){display:none}}
+:root{--blue:#155EEF;--blue2:#1F6FEB;--blue3:#DCE8FF;--blue4:#EEF4FF;--blue5:#0B3B9E;--white:#fff;--line:#C9D9F5;--text:#123B78;--muted:#5D7FB8;--green:#155EEF}
+*{box-sizing:border-box}html,body{margin:0;background:#fff;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}body{padding-bottom:80px}.app{max-width:760px;margin:auto;min-height:100vh}.top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line);padding:12px 14px 10px}.toprow{display:flex;align-items:center;gap:10px}.brand{font-size:20px;font-weight:950;letter-spacing:.03em;color:var(--blue5)}.sub{font-size:11px;color:var(--muted);margin-top:2px}.status{margin-left:auto;border:1px solid var(--line);background:var(--blue4);color:var(--blue);padding:6px 9px;border-radius:20px;font-size:10px;font-weight:900}.status.live{background:var(--blue);color:#fff;border-color:var(--blue)}
+main{padding:10px 12px 18px}.view{display:none}.view.active{display:block}.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:8px 2px 10px}.sectionhead h2{font-size:17px;margin:0;color:var(--blue5)}.link{font-size:11px;font-weight:900;color:var(--blue);background:none;border:0;padding:6px}.search{display:flex;gap:7px;margin-bottom:10px}.search input{flex:1}.input,select{width:100%;background:#fff;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;outline:none}.input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue4)}button{font:inherit;cursor:pointer}.btn{border:1px solid var(--blue);background:#fff;color:var(--blue);border-radius:12px;padding:11px 13px;font-weight:900}.btn.primary{background:var(--blue);color:#fff}.btn.full{width:100%}.btn:active{transform:scale(.98)}
+.tile{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;margin-bottom:9px;box-shadow:0 4px 14px rgba(21,94,239,.08)}.tile.blue{background:var(--blue);color:#fff;border-color:var(--blue)}.tile.soft{background:var(--blue4)}.tilehead{display:flex;justify-content:space-between;align-items:center;gap:8px}.ticker{font-size:18px;font-weight:950;color:var(--blue5)}.tile.blue .ticker{color:#fff}.company{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}.tile.blue .company{color:#DCE8FF}.price{font-size:22px;font-weight:950;text-align:right}.pct{font-size:13px;font-weight:950;padding:5px 7px;border-radius:8px;background:var(--blue4);color:var(--blue)}.tile.blue .pct{background:#fff;color:var(--blue)}.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:11px}.metric{background:var(--blue4);border-radius:9px;padding:7px}.tile.blue .metric{background:rgba(255,255,255,.16)}.metric span{display:block;font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase}.tile.blue .metric span{color:#DCE8FF}.metric b{display:block;font-size:11px;margin-top:2px;color:var(--blue5)}.tile.blue .metric b{color:#fff}.badge{display:inline-block;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:950;background:var(--blue3);color:var(--blue5)}.badge.trade{background:var(--blue);color:#fff}.badge.watch{background:var(--blue3);color:var(--blue5)}.badge.skip{background:#B8C9E8;color:var(--blue5)}
+.market{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}.market .tile{margin:0;padding:10px}.market .symbol{font-size:10px;font-weight:900}.market .mprice{font-size:16px;font-weight:950;margin-top:3px}.market .mchange{font-size:10px;font-weight:900;color:var(--blue)}.tabs{display:flex;border:1px solid var(--blue);border-radius:12px;overflow:hidden;margin:10px 0}.tabs button{flex:1;border:0;border-right:1px solid var(--blue);background:#fff;color:var(--blue);padding:10px 5px;font-weight:900;font-size:11px}.tabs button:last-child{border-right:0}.tabs button.active{background:var(--blue);color:#fff}.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.space{justify-content:space-between}.muted{color:var(--muted);font-size:11px}.small{font-size:11px;line-height:1.45;color:var(--muted)}.label{font-size:9px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.06em}.hero{background:var(--blue);color:#fff;border-radius:18px;padding:15px;margin-bottom:10px}.hero h2,.hero h3{color:#fff;margin:0 0 5px}.hero .small{color:#DCE8FF}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.formrow{margin-bottom:8px}.formrow label{display:block;font-size:9px;font-weight:900;color:var(--muted);margin-bottom:4px;text-transform:uppercase}.divider{height:1px;background:var(--line);margin:10px 0}.empty{padding:24px 10px;text-align:center;color:var(--muted);font-size:12px;border:1px dashed var(--line);border-radius:14px}
+.detailTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.detailPrice{font-size:30px;font-weight:950;color:#fff}.back{border:0;background:none;color:var(--blue);font-weight:900;padding:4px 0}.liveDot{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:950;color:var(--blue)}.liveDot:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--blue);display:inline-block}.chartBox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px;margin-bottom:9px}.chartHeader{display:flex;justify-content:space-between;align-items:center;padding:2px 3px 7px}.chartTitle{font-size:11px;font-weight:950;color:var(--blue5)}.chartSub{font-size:9px;color:var(--muted)}.chart{width:100%;height:270px;display:block;background:#fff;border-radius:10px}.tf{display:flex;gap:4px;overflow:auto;padding:4px 0 8px}.tf button{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--blue);border-radius:8px;padding:7px 9px;font-size:9px;font-weight:950}.tf button.active{background:var(--blue);color:#fff;border-color:var(--blue)}.newsitem{padding:10px 0;border-bottom:1px solid var(--line)}.newsitem:last-child{border-bottom:0}.newsitem b{font-size:12px;color:var(--blue5);line-height:1.35}.newsmeta{display:flex;justify-content:space-between;gap:8px;margin-top:4px;font-size:9px;color:var(--muted)}.newslink{display:block;color:var(--blue);font-weight:900;text-decoration:none;margin-top:4px;font-size:9px}.liveStamp{font-size:9px;color:var(--muted);text-align:right;margin:-3px 2px 8px}.nav{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 7px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(21,94,239,.08)}.nav button{border:0;background:#fff;color:var(--muted);font-size:10px;font-weight:900;padding:5px}.nav button b{display:block;font-size:19px;line-height:19px;margin-bottom:2px}.nav button.active{color:var(--blue);background:var(--blue4);border-radius:10px}.toast{position:fixed;top:65px;left:50%;transform:translateX(-50%);z-index:100;background:var(--blue);color:#fff;padding:10px 14px;border-radius:12px;font-size:11px;font-weight:800;display:none;max-width:92%;box-shadow:0 6px 18px rgba(21,94,239,.25)}
+@media(min-width:700px){.app{border-left:1px solid var(--line);border-right:1px solid var(--line)}main{padding:14px 18px}.nav{max-width:760px;left:50%;right:auto;transform:translateX(-50%);width:100%;border-left:1px solid var(--line);border-right:1px solid var(--line)}}
 </style>
 </head>
 <body>
-<header><h1>OBI TRADING OS <span class="blue">V8.6</span> · APPROVAL ENGINE</h1><small>Scanner → analysis → approval ticket → Abyan execution request</small></header>
+<div id="toast" class="toast"></div>
+<div class="app">
+<header class="top"><div class="toprow"><div><div class="brand">OBI SCANNER</div><div class="sub">Live US market intelligence • V8.7 LIVE</div></div><span id="conn" class="status">CONNECTING</span></div></header>
 <main>
-<section class="grid">
-<div class="card stat"><small>MODE</small><b id="mode">APPROVAL</b></div>
-<div class="card stat"><small>MIN R:R</small><b>2.00R</b></div>
-<div class="card stat"><small>MAX DAILY LOSS</small><b>$50</b></div>
-<div class="card stat"><small>STATUS</small><b id="status" class="orange">READY</b></div>
+<section id="home" class="view active">
+  <div class="search"><input id="homeSearch" class="input" placeholder="Search ticker…" autocomplete="off" autocapitalize="characters"><button class="btn primary" onclick="openTicker()">SEARCH</button></div>
+  <div id="marketCards" class="market"></div>
+  <div class="hero"><h2>Find the move before the chase.</h2><div class="small">Alpaca live data → movers → OBI technical gates → research firewall.</div><button class="btn" style="margin-top:10px" onclick="setView('scan');scan()">RUN OBI SCANNER</button></div>
+  <div class="sectionhead"><h2>Top Movers</h2><button class="link" onclick="loadMovers()">REFRESH</button></div>
+  <div class="tabs"><button id="gainTab" class="active" onclick="moverTab('gainers')">GAINERS</button><button id="lossTab" onclick="moverTab('losers')">LOSERS</button></div>
+  <div id="moversList"></div>
 </section>
-
-<section class="card">
-<h3>Scanner</h3>
-<div class="controls">
-<input id="backend" placeholder="Backend URL (optional)" style="min-width:240px">
-<input id="minPct" type="number" value="5" step=".1" placeholder="Min % change">
-<input id="minAccel" type="number" value="0" step=".1" placeholder="Min acceleration %">
-<input id="maxPrice" type="number" value="5" step=".01" placeholder="Max price">
-<button class="primary" onclick="scan()">SCAN</button>
-<button onclick="demo()">LOAD DEMO</button>
+<section id="scan" class="view">
+  <div class="sectionhead"><h2>OBI Scanner</h2><button class="link" onclick="scan()">REFRESH</button></div>
+  <div class="tile soft"><div class="small">Dynamic discovery from Alpaca movers, most-active stocks and news. Existing V8 technical + research gates are preserved.</div></div>
+  <div class="grid2"><div class="formrow"><label>Max Price</label><input id="maxPrice" class="input" type="number" value="5" step=".01" min="0"></div><div class="formrow"><label>Min R:R</label><input id="minRR" class="input" type="number" value="2" step=".1" min="2"></div></div>
+  <div class="grid2"><div class="formrow"><label>Min Daily % Change</label><input id="minChange" class="input" type="number" value="2" step=".1"></div><div class="formrow"><label>Max Daily % Change</label><input id="maxChange" class="input" type="number" value="100" step="1"></div></div>
+  <div class="grid2"><div class="formrow"><label>Min 5M Acceleration %</label><input id="minAcceleration" class="input" type="number" value="0" step=".1"></div><div class="formrow"><label>5M Acceleration</label><div class="input" style="background:var(--blue4);font-size:10px;color:var(--muted)">Latest 5M move minus previous 5M move</div></div></div>
+  <button class="btn primary full" onclick="scan()">RUN FULL OBI SCAN</button><div id="scanSummary" class="small" style="margin:10px 2px"></div><div id="scanResults"></div>
+</section>
+<section id="watch" class="view"><div class="sectionhead"><h2>Watchlist</h2><button class="link" onclick="renderWatch()">REFRESH</button></div><div id="watchList"></div></section>
+<section id="trade" class="view">
+<div class="sectionhead"><h2>OBI Trade Approval</h2><span class="badge watch">APPROVAL ONLY</span></div>
+<div id="tradePlan" class="empty">Run the scanner and tap a candidate to build a trade plan.</div>
+<div id="approvalBox" class="tile" style="display:none">
+<div class="label">Approval Ticket</div>
+<div class="grid2" style="margin-top:8px">
+<div class="formrow"><label>Symbol</label><input id="aSymbol" class="input"></div>
+<div class="formrow"><label>Side</label><select id="aSide" class="input"><option>BUY</option><option>SELL</option></select></div>
+<div class="formrow"><label>Quantity</label><input id="aQty" class="input" type="number" min="1" step="1" value="1"></div>
+<div class="formrow"><label>Entry / Limit</label><input id="aEntry" class="input" type="number" step="0.0001"></div>
+<div class="formrow"><label>Stop</label><input id="aStop" class="input" type="number" step="0.0001"></div>
+<div class="formrow"><label>Target</label><input id="aTarget" class="input" type="number" step="0.0001"></div>
 </div>
-<div class="notice muted">Live data requires your market-data backend. Demo mode is intentionally non-trading.</div>
-</section>
-
-<section class="card">
-<h3>Results</h3>
-<div style="overflow:auto"><table><thead><tr><th>Ticker</th><th>Price</th><th>% Change</th><th>Acceleration</th><th>RVOL</th><th>VWAP</th><th>Gate</th></tr></thead>
-<tbody id="rows"><tr><td colspan="7" class="muted">No scan yet.</td></tr></tbody></table></div>
-</section>
-
-<div class="split">
-<section class="card"><h3 id="selected">Live Chart</h3><canvas id="chart"></canvas></section>
-<section class="card"><h3>News / Catalyst</h3><div id="news" class="muted">Select a ticker to inspect it.</div></section>
-</div>
-
-<section class="card">
-<h3>Trade Approval Ticket</h3>
-<div class="ticket">
-<label>Symbol<input id="sym" placeholder="TICKER"></label>
-<label>Side<select id="side"><option>BUY</option><option>SELL</option></select></label>
-<label>Quantity<input id="qty" type="number" value="10"></label>
-<label>Entry / Limit<input id="entry" type="number" step=".0001"></label>
-<label>Stop<input id="stop" type="number" step=".0001"></label>
-<label>Target<input id="target" type="number" step=".0001"></label>
-</div>
-<div class="notice"><b>R:R: <span id="rr">—</span></b> <span id="rrmsg" class="muted"></span></div>
-<div class="controls" style="margin-top:10px">
-<button class="primary" onclick="buildTicket()">BUILD APPROVAL REQUEST</button>
-<button onclick="copyTicket()">COPY REQUEST</button>
-</div>
-<pre id="request" class="notice" style="white-space:pre-wrap;display:none"></pre>
-</section>
-
-<section class="card">
-<h3>Hard Safety Gates</h3>
-<div class="notice">✓ Explicit approval required &nbsp; ✓ Minimum 2R &nbsp; ✓ No averaging down &nbsp; ✓ Stop required &nbsp; ✓ Size from stop distance &nbsp; ✓ Dilution/compliance/catalyst review required before execution</div>
-</section>
+<div class="tile soft" style="margin-top:8px"><div class="label">Risk Gate</div><div id="rrValue" style="font-size:20px;font-weight:950;margin-top:4px">R:R —</div><div id="rrGate" class="small">Minimum required: 2.00R</div></div>
+<div class="row" style="margin-top:8px"><button class="btn primary" onclick="buildApproval()">BUILD APPROVAL REQUEST</button><button class="btn" onclick="openTicker($('aSymbol').value)">LIVE CHART + NEWS</button></div>
+<textarea id="approvalText" class="input" style="margin-top:8px;min-height:180px;display:none" readonly></textarea>
+<button id="copyApproval" class="btn full" style="margin-top:8px;display:none" onclick="copyApproval()">COPY APPROVAL REQUEST</button>
+</div></section>
+<section id="detail" class="view"><button class="back" onclick="closeDetail()">← Back</button><div id="detailBody"></div></section>
 </main>
+<nav class="nav"><button class="active" data-v="home" onclick="setView('home')"><b>⌂</b>Home</button><button data-v="scan" onclick="setView('scan')"><b>◉</b>Scanner</button><button data-v="watch" onclick="setView('watch')"><b>☆</b>Watch</button><button data-v="trade" onclick="setView('trade')"><b>↗</b>Trade</button></nav>
+</div>
 <script>
-const demoData=[
- {s:"DEMO1",p:1.42,ch:18.4,a:7.2,r:4.1,v:1.36,g:"WATCH"},
- {s:"DEMO2",p:2.18,ch:11.7,a:3.8,r:2.8,v:2.01,g:"WATCH"},
- {s:"DEMO3",p:.84,ch:8.2,a:1.4,r:3.2,v:.91,g:"WAIT"},
- {s:"DEMO4",p:3.61,ch:26.5,a:12.4,r:5.6,v:3.02,g:"WATCH"}
-];
-function render(data){let min=+document.getElementById('minPct').value,max=+document.getElementById('maxPrice').value,acc=+document.getElementById('minAccel').value;
-data=data.filter(x=>x.ch>=min&&x.a>=acc&&x.p<=max);
-rows.innerHTML=data.length?data.map(x=>`<tr onclick='selectTicker(${JSON.stringify(x)})'><td><b>${x.s}</b></td><td>$${x.p.toFixed(2)}</td><td class="green">+${x.ch.toFixed(1)}%</td><td class="${x.a>5?'green':''}">${x.a.toFixed(1)}%</td><td>${x.r.toFixed(1)}x</td><td>$${x.v.toFixed(2)}</td><td>${x.g}</td></tr>`).join(""):'<tr><td colspan="7">No symbols pass filters.</td></tr>'}
-function demo(){status.textContent="DEMO";status.className="orange";render(demoData)}
-async function scan(){
- const b=backend.value.trim().replace(/\/$/,"");
- if(!b){demo();return}
- try{
-  status.textContent="SCANNING";let r=await fetch(b+"/api/scanner");if(!r.ok)throw Error("HTTP "+r.status);
-  let d=await r.json();render(d.symbols||d.results||[]);status.textContent="CONNECTED";status.className="green";
- }catch(e){status.textContent="BACKEND ERROR";status.className="red";alert("Scanner backend error: "+e.message)}
-}
-function selectTicker(x){
- selected.textContent=x.s+" · Live Chart";sym.value=x.s;entry.value=x.p.toFixed(4);stop.value=(x.p*.97).toFixed(4);target.value=(x.p*1.06).toFixed(4);
- news.innerHTML=`<b>${x.s}</b><br>Scanner catalyst status: <span class="orange">${x.g}</span><br><br>Before any trade, verify fresh news, SEC filings, dilution/offering/warrants/convertibles, Nasdaq compliance, float, RVOL, spread, VWAP and multi-timeframe confirmation.<br><br><span class="muted">Chart shown below is a visual placeholder until a live bars endpoint is connected.</span>`;
- draw(x.p)
- calc()
-}
-function draw(price){
- const c=chart,ctx=c.getContext("2d"),d=devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;c.width=w*d;c.height=h*d;ctx.scale(d,d);ctx.clearRect(0,0,w,h);
- ctx.strokeStyle="#243646";for(let i=1;i<6;i++){let y=h*i/6;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
- let pts=[],v=price*.92;for(let i=0;i<80;i++){v*=1+(Math.sin(i*.65)*.002)+(Math.random()-.45)*.009;pts.push(v)}
- ctx.strokeStyle="#5aa9ff";ctx.lineWidth=2;ctx.beginPath();pts.forEach((v,i)=>{let x=i*w/79,y=h-(v-Math.min(...pts))/(Math.max(...pts)-Math.min(...pts))*h*.8-h*.1;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();
-}
-function calc(){
- let e=+entry.value,s=+stop.value,t=+target.value;if(!(e&&s&&t)){rr.textContent="—";return}
- let risk=Math.abs(e-s),reward=Math.abs(t-e),r=reward/risk;rr.textContent=r.toFixed(2)+"R";rr.className=r>=2?"green":"red";rrmsg.textContent=r>=2?"PASS":"BLOCKED — minimum 2R required";
-}
-[entry,stop,target].forEach(x=>x.addEventListener("input",calc));
-function buildTicket(){
- calc();let r=parseFloat(rr.textContent);if(!r||r<2){alert("Trade blocked. R:R must be at least 2.00R.");return}
- request.textContent=`OBI APPROVAL REQUEST — Validate this exact trade against ALL OBI gates using my connected Abyan account.
+const API='https://obi-trading-os-v8.sardarobi.workers.dev',$=id=>document.getElementById(id);let moverMode='gainers',lastScan=null,selected=null,detailSymbol='',detailTF='5Min',detailTimer=null,newsTimer=null,chartTimer=null;let watch=JSON.parse(localStorage.getItem('obi_watch_v8')||'[]');
+function toast(s){const t=$('toast');t.textContent=s;t.style.display='block';clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.style.display='none',2500)}
+function clearDetailTimers(){[detailTimer,newsTimer,chartTimer].forEach(x=>x&&clearInterval(x));detailTimer=newsTimer=chartTimer=null}
+function setView(v){if(v!=='detail')clearDetailTimers();document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===v));document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.v===v));if(v==='watch')renderWatch()}
+async function get(path){const r=await fetch(API+path,{cache:'no-store'});let d;try{d=await r.json()}catch{throw new Error('Server returned an invalid response')}if(!r.ok)throw new Error(d.error||d.message||'Request failed');return d}
+function fmt(n){n=Number(n);return Number.isFinite(n)?n.toFixed(n<1?4:2):'—'}
+function fmtVol(n){n=Number(n);if(!Number.isFinite(n))return'—';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return String(Math.round(n))}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function validTicker(s){return /^[A-Z0-9.\-]{1,12}$/.test(s)}
+async function health(){try{const d=await get('/api/health');$('conn').textContent='LIVE';$('conn').className='status live';return d}catch{$('conn').textContent='OFFLINE';$('conn').className='status'}}
+async function loadMarket(){try{const d=await get('/api/snapshot?symbols=SPY,QQQ,IWM&feed=auto');const m=d.snapshots||d||{};$('marketCards').innerHTML=['SPY','QQQ','IWM'].map(s=>{const x=m[s]||{};const p=+(x.latestTrade?.p||x.minuteBar?.c||x.dailyBar?.c||0),pc=+(x.prevDailyBar?.c||0),ch=pc?(p/pc-1)*100:0;return `<div class="tile"><div class="symbol">${s}</div><div class="mprice">$${fmt(p)}</div><div class="mchange">${ch>=0?'+':''}${ch.toFixed(2)}%</div></div>`}).join('')}catch{$('marketCards').innerHTML='<div class="tile soft"><div class="small">Market data unavailable</div></div>'}}
+function moverTab(mode){moverMode=mode;$('gainTab').classList.toggle('active',mode==='gainers');$('lossTab').classList.toggle('active',mode==='losers');loadMovers()}
+async function loadMovers(){$('moversList').innerHTML='<div class="empty">Loading live movers…</div>';try{const d=await get('/api/movers?top=15&maxPrice=50&feed=auto');const rows=d[moverMode]||[];$('moversList').innerHTML=rows.map(moverCard).join('')||'<div class="empty">No movers returned.</div>'}catch(e){$('moversList').innerHTML=`<div class="empty">${esc(e.message)}</div>`}}
+function moverCard(x){return `<div class="tile" onclick="openTicker('${esc(x.symbol)}')"><div class="tilehead"><div><div class="ticker">${esc(x.symbol)}</div><div class="company">Alpaca live market mover</div></div><div><div class="price">$${fmt(x.last)}</div><div class="pct">${x.changePct>=0?'+':''}${Number(x.changePct).toFixed(2)}%</div></div></div><div class="meta"><div class="metric"><span>Volume</span><b>${fmtVol(x.volume)}</b></div><div class="metric"><span>RVOL</span><b>${x.rvol?Number(x.rvol).toFixed(1)+'x':'—'}</b></div><div class="metric"><span>High</span><b>$${fmt(x.high)}</b></div><div class="metric"><span>Open</span><b>$${fmt(x.open)}</b></div></div></div>`}
+function openTicker(sym){sym=(sym||$('homeSearch').value||'').trim().toUpperCase();if(!validTicker(sym)){toast('Enter a valid ticker');return}detailSymbol=sym;detailTF='5Min';setView('detail');loadDetail(sym)}
+function closeDetail(){clearDetailTimers();detailSymbol='';setView('home')}
+function timeframeButtons(){return [['1Min','1M'],['5Min','5M'],['15Min','15M'],['1Hour','1H'],['4Hour','4H']].map(([v,l])=>`<button class="${detailTF===v?'active':''}" onclick="changeTF('${v}')">${l}</button>`).join('')}
+function calcEMA(a,n){if(a.length<n)return null;let e=a.slice(0,n).reduce((x,y)=>x+y,0)/n,k=2/(n+1);for(let i=n;i<a.length;i++)e=a[i]*k+e*(1-k);return e}
+function chartData(bars){const closes=bars.map(b=>+b.c).filter(Number.isFinite);const ema=calcEMA(closes,20);return {bars,ema}}
+function drawChart(bars){const c=$('chart');if(!c||!bars.length)return;const rect=c.getBoundingClientRect(),dpr=Math.max(1,window.devicePixelRatio||1),W=Math.max(300,Math.floor(rect.width)),H=270;c.width=W*dpr;c.height=H*dpr;const x=c.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);const pad={l:7,r:48,t:10,b:30},cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;const n=bars.length,visible=bars.slice(-Math.min(100,n));const hi=Math.max(...visible.map(b=>+b.h)),lo=Math.min(...visible.map(b=>+b.l));const range=Math.max(1e-8,hi-lo),maxVol=Math.max(...visible.map(b=>+b.v||0),1);const y=p=>pad.t+(hi-p)/range*ch;const step=cw/Math.max(1,visible.length);const body=Math.max(2,Math.min(9,step*.62));
+ x.font='9px system-ui';x.fillStyle='#5D7FB8';x.strokeStyle='#DCE8FF';x.lineWidth=1;for(let i=0;i<4;i++){const yy=pad.t+i*ch/3;x.beginPath();x.moveTo(pad.l,yy);x.lineTo(W-pad.r,yy);x.stroke();const val=hi-(range*i/3);x.fillText('$'+fmt(val),W-pad.r+5,yy+3)}
+ visible.forEach((b,i)=>{const xx=pad.l+i*step+step/2,open=+b.o,close=+b.c,high=+b.h,low=+b.l,up=close>=open;x.strokeStyle='#155EEF';x.lineWidth=1;x.beginPath();x.moveTo(xx,y(high));x.lineTo(xx,y(low));x.stroke();x.fillStyle=up?'#155EEF':'#B8C9E8';const top=y(Math.max(open,close)),bottom=y(Math.min(open,close));x.fillRect(xx-body/2,top,body,Math.max(1,bottom-top));const vh=Math.max(1,(+b.v||0)/maxVol*28);x.fillStyle='#DCE8FF';x.fillRect(xx-body/2,H-18-vh,body,vh)});
+ // EMA20 overlay
+ const closes=visible.map(b=>+b.c),k=20;let e=null;if(closes.length>=k){e=closes.slice(0,k).reduce((a,b)=>a+b,0)/k;const alpha=2/(k+1);x.strokeStyle='#0B3B9E';x.lineWidth=1.6;x.beginPath();closes.forEach((v,i)=>{if(i>=k)e=v*alpha+e*(1-alpha);if(i>=k-1){const xx=pad.l+i*step+step/2,yy=y(e);i===k-1?x.moveTo(xx,yy):x.lineTo(xx,yy)}});x.stroke()}
+ const last=visible.at(-1),lastY=y(+last.c);x.fillStyle='#155EEF';x.beginPath();x.arc(pad.l+(visible.length-1)*step+step/2,lastY,3,0,Math.PI*2);x.fill();x.fillStyle='#5D7FB8';x.fillText('VOL',pad.l,H-5);x.fillStyle='#0B3B9E';x.fillText('EMA20',pad.l+34,H-5);}
+async function loadChart(sym){try{const d=await get('/api/bars?symbol='+encodeURIComponent(sym)+'&timeframe='+detailTF+'&limit=120&feed=auto');const bars=d.bars||[];$('chartStatus').textContent=bars.length?`${bars.length} bars • ${detailTF} • auto-refresh 5s`:'No bars returned';drawChart(bars)}catch(e){$('chartStatus').textContent='Chart unavailable: '+e.message}}
+function changeTF(tf){detailTF=tf;document.querySelectorAll('.tf button').forEach(b=>b.classList.toggle('active',b.textContent===({'1Min':'1M','5Min':'5M','15Min':'15M','1Hour':'1H','4Hour':'4H'}[tf])));loadChart(detailSymbol)}
+function renderNews(news){$('detailNews').innerHTML=(news||[]).slice(0,8).map(n=>{const dt=n.created_at||n.updated_at||'';const source=n.source||n.author||'Alpaca News';return `<div class="newsitem"><b>${esc(n.headline||'Untitled')}</b><div class="newsmeta"><span>${esc(source)}</span><span>${esc(dt?new Date(dt).toLocaleString(): '—')}</span></div>${n.url?`<a class="newslink" href="${esc(n.url)}" target="_blank" rel="noopener">READ ARTICLE ↗</a>`:''}</div>`}).join('')||'<div class="small">No recent news returned for this ticker.</div>';}
+async function loadNews(sym){try{const d=await get('/api/news?symbol='+encodeURIComponent(sym)+'&limit=8');renderNews(d.news||[]);$('newsStamp').textContent='Updated '+new Date().toLocaleTimeString()}catch(e){$('detailNews').innerHTML=`<div class="small">News unavailable: ${esc(e.message)}</div>`}}
+function updateQuote(s){const p=+(s.latestTrade?.p||s.minuteBar?.c||s.dailyBar?.c||0),pc=+(s.prevDailyBar?.c||0),ch=pc?(p/pc-1)*100:0;$('detailPrice').textContent='$'+fmt(p);$('detailPct').textContent=(ch>=0?'+':'')+ch.toFixed(2)+'%';$('dVolume').textContent=fmtVol(s.dailyBar?.v);$('dOpen').textContent='$'+fmt(s.dailyBar?.o);$('dHigh').textContent='$'+fmt(s.dailyBar?.h);$('dLow').textContent='$'+fmt(s.dailyBar?.l);$('quoteStamp').textContent='Quote '+new Date().toLocaleTimeString();if(selected)selected.price=p}
+async function refreshDetailQuote(){if(!detailSymbol)return;try{const d=await get('/api/snapshot?symbols='+encodeURIComponent(detailSymbol)+'&feed=auto');const s=(d.snapshots||d||{})[detailSymbol]||{};updateQuote(s)}catch{}}
+async function loadDetail(sym){clearDetailTimers();$('detailBody').innerHTML='<div class="empty">Loading live quote, chart and news…</div>';try{const [sd,bd,nd]=await Promise.all([get('/api/snapshot?symbols='+encodeURIComponent(sym)+'&feed=auto'),get('/api/bars?symbol='+encodeURIComponent(sym)+'&timeframe='+detailTF+'&limit=120&feed=auto'),get('/api/news?symbol='+encodeURIComponent(sym)+'&limit=8')]);const s=(sd.snapshots||sd||{})[sym]||{};const p=+(s.latestTrade?.p||s.minuteBar?.c||s.dailyBar?.c||0),pc=+(s.prevDailyBar?.c||0),ch=pc?(p/pc-1)*100:0;selected={symbol:sym,price:p,stop:p*.97,tp1:p*1.06,tp2:p*1.09};$('detailBody').innerHTML=`<div class="tile blue"><div class="detailTop"><div><div class="ticker">${esc(sym)}</div><div class="company">Alpaca live quote • ${esc(sd.feed||'live feed')}</div></div><div style="text-align:right"><div id="detailPrice" class="detailPrice">$${fmt(p)}</div><div id="detailPct" class="pct">${ch>=0?'+':''}${ch.toFixed(2)}%</div></div></div><div class="meta"><div class="metric"><span>Volume</span><b id="dVolume">${fmtVol(s.dailyBar?.v)}</b></div><div class="metric"><span>Open</span><b id="dOpen">$${fmt(s.dailyBar?.o)}</b></div><div class="metric"><span>High</span><b id="dHigh">$${fmt(s.dailyBar?.h)}</b></div><div class="metric"><span>Low</span><b id="dLow">$${fmt(s.dailyBar?.l)}</b></div></div></div><div class="liveStamp"><span class="liveDot">LIVE POLL</span> <span id="quoteStamp">Quote ${new Date().toLocaleTimeString()}</span></div><div class="chartBox"><div class="chartHeader"><div><div class="chartTitle">PRICE CHART</div><div id="chartStatus" class="chartSub">${bd.bars?.length||0} bars • ${detailTF} • auto-refresh 5s</div></div><div class="chartSub">Candles • Volume • EMA20</div></div><div class="tf">${timeframeButtons()}</div><canvas id="chart" class="chart"></canvas></div><div class="grid2"><button class="btn" onclick="toggleWatch('${esc(sym)}')">${watch.includes(sym)?'REMOVE WATCH':'ADD TO WATCH'}</button><button class="btn primary" onclick="analyzeTicker('${esc(sym)}')">RUN OBI ANALYSIS</button></div><div class="sectionhead" style="margin-top:16px"><h2>Live News</h2><button class="link" onclick="loadNews('${esc(sym)}')">REFRESH</button></div><div class="tile" id="detailNews"></div><div id="newsStamp" class="liveStamp"></div>`;drawChart(bd.bars||[]);renderNews(nd.news||[]);$('newsStamp').textContent='Updated '+new Date().toLocaleTimeString();detailTimer=setInterval(refreshDetailQuote,3000);chartTimer=setInterval(()=>loadChart(detailSymbol),5000);newsTimer=setInterval(()=>loadNews(detailSymbol),30000)}catch(e){$('detailBody').innerHTML=`<div class="empty">${esc(e.message)}<br><br>Check that the Cloudflare Worker is deployed and its Alpaca credentials are configured.</div>`}}
+async function analyzeTicker(sym){setView('scan');$('scanResults').innerHTML='<div class="empty">Running full OBI analysis on '+esc(sym)+'…</div>';try{const d=await get('/api/scan?symbols='+encodeURIComponent(sym)+'&maxPrice=50&minRR=2&feed=auto&topN=1');lastScan=d;renderScan(d)}catch(e){$('scanResults').innerHTML=`<div class="empty">${esc(e.message)}</div>`}}
+function statusClass(s){return s==='TRADE'?'trade':s==='WATCH'||s==='WAIT'?'watch':'skip'}
+function scan(){const max=$('maxPrice').value||5,minrr=$('minRR').value||2,minChange=$('minChange').value||0,maxChange=$('maxChange').value||100,minAcceleration=$('minAcceleration').value||0;$('scanResults').innerHTML='<div class="empty">Discovering candidates and running the OBI gates…</div>';get('/api/scan?maxPrice='+encodeURIComponent(max)+'&minRR='+encodeURIComponent(minrr)+'&minChange='+encodeURIComponent(minChange)+'&maxChange='+encodeURIComponent(maxChange)+'&minAcceleration='+encodeURIComponent(minAcceleration)+'&feed=auto&topN=8').then(d=>{lastScan=d;renderScan(d);toast('OBI scan complete')}).catch(e=>{$('scanResults').innerHTML=`<div class="empty">Scanner error: ${esc(e.message)}</div>`})}
+function renderScan(d){if(!d.ok){$('scanResults').innerHTML=`<div class="empty">Scanner stopped safely.<br>${esc(d.error||d.message||'No decision')}</div>`;return}$('scanSummary').innerHTML=`${d.discovery?.rawCandidates||0} discovered • ${d.discovery?.technicalCandidates||0} technical • ${d.discovery?.researchCandidates||0} researched • <b>${d.tradeCandidates||0} TRADE</b> • ${d.waitCandidates||0} WAIT • ${d.skipCandidates||0} SKIP<br><span class="muted">Filters: daily ${fmt(d.minChange)}% to ${fmt(d.maxChange)}% • acceleration ≥ ${fmt(d.minAcceleration)}%</span>`;$('scanResults').innerHTML=(d.rows||[]).map(x=>`<div class="tile" onclick="selectTrade(${JSON.stringify(x).replace(/"/g,'&quot;')})"><div class="tilehead"><div><div class="ticker">${esc(x.symbol)}</div><div class="company">${esc(x.source||'OBI')}</div></div><div><div class="price">$${fmt(x.entry)}</div><span class="badge ${statusClass(x.status)}">${esc(x.status)}</span></div></div><div class="meta"><div class="metric"><span>Daily %</span><b>${x.change==null?'—':(x.change>=0?'+':'')+fmt(x.change)}%</b></div><div class="metric"><span>5M %</span><b>${x.momentum?.change5m==null?'—':(x.momentum.change5m>=0?'+':'')+fmt(x.momentum.change5m)}%</b></div><div class="metric"><span>Accel %</span><b>${x.momentum?.accelerationPct==null?'—':(x.momentum.accelerationPct>=0?'+':'')+fmt(x.momentum.accelerationPct)}%</b></div><div class="metric"><span>R:R</span><b>${fmt(x.rr)}R</b></div><div class="metric"><span>Score</span><b>${fmt(x.score)}</b></div><div class="metric"><span>RVOL</span><b>${x.tech?.rvolRecent?x.tech.rvolRecent.toFixed(1)+'x':'—'}</b></div><div class="metric"><span>Stop</span><b>$${fmt(x.stop)}</b></div><div class="metric"><span>TP2</span><b>$${fmt(x.tp2)}</b></div></div><div class="small" style="margin-top:8px">4H ${x.tech?.trend4?'OK':'—'} • 15M ${x.tech?.pullback?'OK':'—'} • VWAP ${x.tech?.reclaimVWAP?'OK':'—'} • 1M ${x.tech?.trigger?'OK':'—'} • ${x.momentum?.accelerationPct>=0?'ACCELERATING':'DECELERATING'}</div></div>`).join('')||'<div class="empty">No candidates returned. Try lowering the % change or acceleration filter.</div>'}
+function selectTrade(x){selected=x;setView('trade');$('tradePlan').innerHTML=`<div class="tile blue"><div class="tilehead"><div><div class="ticker">${esc(x.symbol)}</div><div class="company">OBI ${esc(x.status)}</div></div><span class="badge ${statusClass(x.status)}">${esc(x.status)}</span></div><div class="meta"><div class="metric"><span>Entry</span><b>$${fmt(x.entry)}</b></div><div class="metric"><span>Daily %</span><b>${x.change==null?'—':(x.change>=0?'+':'')+fmt(x.change)}%</b></div><div class="metric"><span>Accel %</span><b>${x.momentum?.accelerationPct==null?'—':(x.momentum.accelerationPct>=0?'+':'')+fmt(x.momentum.accelerationPct)}%</b></div><div class="metric"><span>Stop</span><b>$${fmt(x.stop)}</b></div><div class="metric"><span>TP1</span><b>$${fmt(x.tp1)}</b></div><div class="metric"><span>TP2</span><b>$${fmt(x.tp2)}</b></div></div></div><div class="tile soft"><div class="label">OBI Decision</div><div style="font-size:18px;font-weight:950;margin-top:4px">${esc(x.status)}</div><div class="small" style="margin-top:5px">R:R ${fmt(x.rr)}R • score ${fmt(x.score)} • research ${x.research?.catalystVerified?'verified':'unverified'} • dilution ${x.research?.dilution?.length?'risk':'clear'}</div></div><button class="btn primary full" onclick="openTicker('${esc(x.symbol)}')">OPEN LIVE CHART + NEWS</button>`}
 
-Do NOT change the parameters and do NOT place it until I explicitly reply APPROVE.
-
-Symbol: ${sym.value.toUpperCase()}
-Side: ${side.value}
-Quantity: ${qty.value}
-Entry/Limit: ${entry.value}
-Stop: ${stop.value}
-Target: ${target.value}
-R:R: ${r.toFixed(2)}R
-
-Re-check: catalyst/timing, SEC filings, dilution/offering/warrants/convertibles, Nasdaq compliance, float/outstanding, RVOL, liquidity/spread, VWAP, 4H/15M/5M/1M confirmation, FOMO/extension, buying power and risk budget.
-
-If ANY hard gate fails, return WAIT/SKIP.`;
-request.style.display="block"
+function showApproval(x){
+  $('approvalBox').style.display='block';
+  $('aSymbol').value=x.symbol||'';
+  $('aSide').value=x.side||'BUY';
+  $('aQty').value=x.qty||1;
+  $('aEntry').value=Number(x.entry||x.price||0).toFixed(4);
+  $('aStop').value=Number(x.stop||0).toFixed(4);
+  $('aTarget').value=Number(x.tp2||x.target||0).toFixed(4);
+  updateRR();
+  ['aEntry','aStop','aTarget','aQty','aSide'].forEach(id=>$(id).oninput=updateRR);
 }
-async function copyTicket(){buildTicket();if(request.style.display==="block"){await navigator.clipboard.writeText(request.textContent);alert("Approval request copied.")}}
-window.addEventListener("resize",()=>{let p=+entry.value;if(p)draw(p)})
+function updateRR(){
+  const e=+($('aEntry')?.value||0), st=+($('aStop')?.value||0), tp=+($('aTarget')?.value||0);
+  let rr=0;
+  if(e>0 && st>0 && tp>0 && e!==st){rr=Math.abs(tp-e)/Math.abs(e-st)}
+  $('rrValue').textContent='R:R '+(rr?rr.toFixed(2):'—')+'R';
+  $('rrGate').textContent=rr>=2?'PASS — 2R minimum satisfied.':'BLOCKED — minimum required: 2.00R';
+  return rr;
+}
+function buildApproval(){
+  const sym=$('aSymbol').value.trim().toUpperCase(), side=$('aSide').value, qty=+$('aQty').value, e=+$('aEntry').value, st=+$('aStop').value, tp=+$('aTarget').value, rr=updateRR();
+  if(!validTicker(sym)||qty<1||e<=0||st<=0||tp<=0){toast('Complete the approval ticket first');return}
+  if(rr<2){toast('BLOCKED: R:R must be at least 2.00R');return}
+  $('approvalText').value=`OBI APPROVAL REQUEST — Validate this exact trade against all OBI gates using my connected Abyan account. DO NOT CHANGE THE PARAMETERS and DO NOT PLACE IT until I explicitly reply APPROVE.
+
+Symbol: ${sym}
+Side: ${side}
+Quantity: ${qty}
+Entry/Limit: ${e}
+Stop: ${st}
+Target: ${tp}
+R:R: ${rr.toFixed(2)}R
+
+Before execution re-check: current catalyst/news and timestamp, SEC/company filings, dilution/offering/ATM/warrants/convertibles, Nasdaq compliance/delisting risk, float/outstanding, RVOL, liquidity/spread, VWAP, 4H/15M/5M/1M structure, FOMO/extension, buying power, daily loss limit and position risk.
+
+Execution rule: no order until I explicitly reply APPROVE.`;
+  $('approvalText').style.display='block';
+  $('copyApproval').style.display='block';
+  toast('Approval request built');
+}
+async function copyApproval(){
+  try{await navigator.clipboard.writeText($('approvalText').value);toast('Approval request copied')}
+  catch{$('approvalText').select();document.execCommand('copy');toast('Approval request copied')}
+}
+
+function toggleWatch(sym){sym=sym.toUpperCase();watch=watch.includes(sym)?watch.filter(x=>x!==sym):[...watch,sym];localStorage.setItem('obi_watch_v8',JSON.stringify(watch));toast(watch.includes(sym)?sym+' added to watchlist':sym+' removed');if(detailSymbol===sym)loadDetail(sym);else renderWatch()}
+function renderWatch(){if(!watch.length){$('watchList').innerHTML='<div class="empty">Your watchlist is empty.<br>Open a ticker and add it.</div>';return}$('watchList').innerHTML=watch.map(s=>`<div class="tile" onclick="openTicker('${esc(s)}')"><div class="tilehead"><div class="ticker">${esc(s)}</div><button class="link" onclick="event.stopPropagation();toggleWatch('${esc(s)}')">REMOVE</button></div><div class="small">Tap for live quote, live chart and news.</div></div>`).join('')}
+$('homeSearch').addEventListener('keydown',e=>{if(e.key==='Enter')openTicker()});health();loadMarket();loadMovers();renderWatch();setInterval(()=>{health();loadMarket()},30000);
+if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 </script>
 </body></html>
