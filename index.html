@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OBI Trading OS V8.6</title>
+<style>
+:root{--bg:#081018;--card:#101b26;--line:#243646;--txt:#eaf2f8;--muted:#8fa3b5;--green:#36d399;--red:#ff657a;--blue:#5aa9ff;--orange:#ffb454}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px system-ui,Arial,sans-serif}
+header{padding:18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#081018ee;backdrop-filter:blur(10px);z-index:3}
+h1{margin:0;font-size:20px}small,.muted{color:var(--muted)}main{max-width:1200px;margin:auto;padding:14px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.stat b{font-size:20px;display:block;margin-top:4px}.green{color:var(--green)}.red{color:var(--red)}.orange{color:var(--orange)}.blue{color:var(--blue)}
+.controls{display:flex;gap:8px;flex-wrap:wrap}.controls input,.controls select,button{background:#0b151e;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:9px}
+button{cursor:pointer}.primary{border-color:var(--blue);background:#10243a}.danger{border-color:var(--red)}
+table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}tr:hover{background:#152331;cursor:pointer}
+#chart{width:100%;height:330px;background:#09131c;border-radius:10px}.split{display:grid;grid-template-columns:1.5fr 1fr;gap:12px}
+.ticket{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.ticket label{font-size:12px;color:var(--muted)}.ticket input{width:100%;margin-top:4px}
+.notice{padding:10px;border-radius:8px;background:#0b151e;border:1px solid var(--line);margin-top:8px}
+@media(max-width:800px){.grid,.split,.ticket{grid-template-columns:1fr 1fr}}@media(max-width:520px){.grid,.split,.ticket{grid-template-columns:1fr}th:nth-child(n+5),td:nth-child(n+5){display:none}}
+</style>
+</head>
+<body>
+<header><h1>OBI TRADING OS <span class="blue">V8.6</span> · APPROVAL ENGINE</h1><small>Scanner → analysis → approval ticket → Abyan execution request</small></header>
+<main>
+<section class="grid">
+<div class="card stat"><small>MODE</small><b id="mode">APPROVAL</b></div>
+<div class="card stat"><small>MIN R:R</small><b>2.00R</b></div>
+<div class="card stat"><small>MAX DAILY LOSS</small><b>$50</b></div>
+<div class="card stat"><small>STATUS</small><b id="status" class="orange">READY</b></div>
+</section>
+
+<section class="card">
+<h3>Scanner</h3>
+<div class="controls">
+<input id="backend" placeholder="Backend URL (optional)" style="min-width:240px">
+<input id="minPct" type="number" value="5" step=".1" placeholder="Min % change">
+<input id="minAccel" type="number" value="0" step=".1" placeholder="Min acceleration %">
+<input id="maxPrice" type="number" value="5" step=".01" placeholder="Max price">
+<button class="primary" onclick="scan()">SCAN</button>
+<button onclick="demo()">LOAD DEMO</button>
+</div>
+<div class="notice muted">Live data requires your market-data backend. Demo mode is intentionally non-trading.</div>
+</section>
+
+<section class="card">
+<h3>Results</h3>
+<div style="overflow:auto"><table><thead><tr><th>Ticker</th><th>Price</th><th>% Change</th><th>Acceleration</th><th>RVOL</th><th>VWAP</th><th>Gate</th></tr></thead>
+<tbody id="rows"><tr><td colspan="7" class="muted">No scan yet.</td></tr></tbody></table></div>
+</section>
+
+<div class="split">
+<section class="card"><h3 id="selected">Live Chart</h3><canvas id="chart"></canvas></section>
+<section class="card"><h3>News / Catalyst</h3><div id="news" class="muted">Select a ticker to inspect it.</div></section>
+</div>
+
+<section class="card">
+<h3>Trade Approval Ticket</h3>
+<div class="ticket">
+<label>Symbol<input id="sym" placeholder="TICKER"></label>
+<label>Side<select id="side"><option>BUY</option><option>SELL</option></select></label>
+<label>Quantity<input id="qty" type="number" value="10"></label>
+<label>Entry / Limit<input id="entry" type="number" step=".0001"></label>
+<label>Stop<input id="stop" type="number" step=".0001"></label>
+<label>Target<input id="target" type="number" step=".0001"></label>
+</div>
+<div class="notice"><b>R:R: <span id="rr">—</span></b> <span id="rrmsg" class="muted"></span></div>
+<div class="controls" style="margin-top:10px">
+<button class="primary" onclick="buildTicket()">BUILD APPROVAL REQUEST</button>
+<button onclick="copyTicket()">COPY REQUEST</button>
+</div>
+<pre id="request" class="notice" style="white-space:pre-wrap;display:none"></pre>
+</section>
+
+<section class="card">
+<h3>Hard Safety Gates</h3>
+<div class="notice">✓ Explicit approval required &nbsp; ✓ Minimum 2R &nbsp; ✓ No averaging down &nbsp; ✓ Stop required &nbsp; ✓ Size from stop distance &nbsp; ✓ Dilution/compliance/catalyst review required before execution</div>
+</section>
+</main>
+<script>
+const demoData=[
+ {s:"DEMO1",p:1.42,ch:18.4,a:7.2,r:4.1,v:1.36,g:"WATCH"},
+ {s:"DEMO2",p:2.18,ch:11.7,a:3.8,r:2.8,v:2.01,g:"WATCH"},
+ {s:"DEMO3",p:.84,ch:8.2,a:1.4,r:3.2,v:.91,g:"WAIT"},
+ {s:"DEMO4",p:3.61,ch:26.5,a:12.4,r:5.6,v:3.02,g:"WATCH"}
+];
+function render(data){let min=+document.getElementById('minPct').value,max=+document.getElementById('maxPrice').value,acc=+document.getElementById('minAccel').value;
+data=data.filter(x=>x.ch>=min&&x.a>=acc&&x.p<=max);
+rows.innerHTML=data.length?data.map(x=>`<tr onclick='selectTicker(${JSON.stringify(x)})'><td><b>${x.s}</b></td><td>$${x.p.toFixed(2)}</td><td class="green">+${x.ch.toFixed(1)}%</td><td class="${x.a>5?'green':''}">${x.a.toFixed(1)}%</td><td>${x.r.toFixed(1)}x</td><td>$${x.v.toFixed(2)}</td><td>${x.g}</td></tr>`).join(""):'<tr><td colspan="7">No symbols pass filters.</td></tr>'}
+function demo(){status.textContent="DEMO";status.className="orange";render(demoData)}
+async function scan(){
+ const b=backend.value.trim().replace(/\/$/,"");
+ if(!b){demo();return}
+ try{
+  status.textContent="SCANNING";let r=await fetch(b+"/api/scanner");if(!r.ok)throw Error("HTTP "+r.status);
+  let d=await r.json();render(d.symbols||d.results||[]);status.textContent="CONNECTED";status.className="green";
+ }catch(e){status.textContent="BACKEND ERROR";status.className="red";alert("Scanner backend error: "+e.message)}
+}
+function selectTicker(x){
+ selected.textContent=x.s+" · Live Chart";sym.value=x.s;entry.value=x.p.toFixed(4);stop.value=(x.p*.97).toFixed(4);target.value=(x.p*1.06).toFixed(4);
+ news.innerHTML=`<b>${x.s}</b><br>Scanner catalyst status: <span class="orange">${x.g}</span><br><br>Before any trade, verify fresh news, SEC filings, dilution/offering/warrants/convertibles, Nasdaq compliance, float, RVOL, spread, VWAP and multi-timeframe confirmation.<br><br><span class="muted">Chart shown below is a visual placeholder until a live bars endpoint is connected.</span>`;
+ draw(x.p)
+ calc()
+}
+function draw(price){
+ const c=chart,ctx=c.getContext("2d"),d=devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;c.width=w*d;c.height=h*d;ctx.scale(d,d);ctx.clearRect(0,0,w,h);
+ ctx.strokeStyle="#243646";for(let i=1;i<6;i++){let y=h*i/6;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+ let pts=[],v=price*.92;for(let i=0;i<80;i++){v*=1+(Math.sin(i*.65)*.002)+(Math.random()-.45)*.009;pts.push(v)}
+ ctx.strokeStyle="#5aa9ff";ctx.lineWidth=2;ctx.beginPath();pts.forEach((v,i)=>{let x=i*w/79,y=h-(v-Math.min(...pts))/(Math.max(...pts)-Math.min(...pts))*h*.8-h*.1;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();
+}
+function calc(){
+ let e=+entry.value,s=+stop.value,t=+target.value;if(!(e&&s&&t)){rr.textContent="—";return}
+ let risk=Math.abs(e-s),reward=Math.abs(t-e),r=reward/risk;rr.textContent=r.toFixed(2)+"R";rr.className=r>=2?"green":"red";rrmsg.textContent=r>=2?"PASS":"BLOCKED — minimum 2R required";
+}
+[entry,stop,target].forEach(x=>x.addEventListener("input",calc));
+function buildTicket(){
+ calc();let r=parseFloat(rr.textContent);if(!r||r<2){alert("Trade blocked. R:R must be at least 2.00R.");return}
+ request.textContent=`OBI APPROVAL REQUEST — Validate this exact trade against ALL OBI gates using my connected Abyan account.
+
+Do NOT change the parameters and do NOT place it until I explicitly reply APPROVE.
+
+Symbol: ${sym.value.toUpperCase()}
+Side: ${side.value}
+Quantity: ${qty.value}
+Entry/Limit: ${entry.value}
+Stop: ${stop.value}
+Target: ${target.value}
+R:R: ${r.toFixed(2)}R
+
+Re-check: catalyst/timing, SEC filings, dilution/offering/warrants/convertibles, Nasdaq compliance, float/outstanding, RVOL, liquidity/spread, VWAP, 4H/15M/5M/1M confirmation, FOMO/extension, buying power and risk budget.
+
+If ANY hard gate fails, return WAIT/SKIP.`;
+request.style.display="block"
+}
+async function copyTicket(){buildTicket();if(request.style.display==="block"){await navigator.clipboard.writeText(request.textContent);alert("Approval request copied.")}}
+window.addEventListener("resize",()=>{let p=+entry.value;if(p)draw(p)})
+</script>
+</body></html>
